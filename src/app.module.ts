@@ -21,6 +21,7 @@ import { StaffModule } from './modules/staff/staff.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './infra/guards/jwt-auth.guard';
 import { RolesGuard } from './infra/guards/roles.guard';
+import { BotSettingsModule } from './modules/bot-settings/bot-settings.module';
 
 
 @Module({
@@ -42,6 +43,7 @@ import { RolesGuard } from './infra/guards/roles.guard';
     AgencyModule,
     CategoryModule,
     StaffModule,
+    BotSettingsModule,
   ],
   controllers: [AppController],
   providers: [

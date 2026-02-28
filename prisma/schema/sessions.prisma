@@ -1,0 +1,23 @@
+model Session {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  channelId      String    @map("channel_id") @db.Uuid
+  state          String?   @db.VarChar
+  startedAt      DateTime? @map("started_at")
+  lastActivityAt DateTime? @map("last_activity_at")
+  expiredAt      DateTime? @map("expired_at")
+  isActive       Boolean   @default(true) @map("is_active")
+
+  createdAt      DateTime? @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id])
+  channel  Channel   @relation(fields: [channelId], references: [id])
+  messages Message[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@map("sessions")
+}

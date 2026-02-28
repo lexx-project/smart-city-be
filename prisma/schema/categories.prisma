@@ -1,0 +1,34 @@
+model Category {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agencyId        String    @map("agency_id") @db.Uuid
+  parentId        String?   @map("parent_id") @db.Uuid
+  name            String    @db.VarChar
+  description     String?   @db.Text
+  defaultSlaHours Int?      @map("default_sla_hours")
+  level           Int       @default(0)
+  sortOrder       Int       @default(0) @map("sort_order")
+  isActive        Boolean   @default(true) @map("is_active")
+
+  // Third-party API config (e.g. Pajak, PDAM, Dukcapil)
+  // Structure: { endpoint, method, headers, requiredFields: ['nop', 'nik'] }
+  integrationConfig Json?   @map("integration_config")
+
+  // Flexible metadata for extra CMS config
+  metadata        Json?
+
+  createdAt       DateTime? @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  // Relations
+  agency    Agency     @relation(fields: [agencyId], references: [id])
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryTree")
+  tickets   Ticket[]
+  slaRules  SlaRule[]
+
+  @@index([agencyId])
+  @@index([parentId])
+  @@index([isActive])
+  @@map("categories")
+}

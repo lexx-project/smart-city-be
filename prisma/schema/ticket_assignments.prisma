@@ -1,0 +1,21 @@
+model TicketAssignment {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketId       String    @map("ticket_id") @db.Uuid
+  assignedTo     String    @map("assigned_to") @db.Uuid
+  assignedBy     String    @map("assigned_by") @db.Uuid
+  assignedAt     DateTime? @map("assigned_at")
+  isActive       Boolean   @default(true) @map("is_active")
+
+  createdAt      DateTime? @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  // Relations
+  ticket         Ticket    @relation(fields: [ticketId], references: [id])
+  assignedToUser StaffUser @relation("AssignedTo", fields: [assignedTo], references: [id])
+  assignedByUser StaffUser @relation("AssignedBy", fields: [assignedBy], references: [id])
+
+  @@index([ticketId])
+  @@index([assignedTo])
+  @@map("ticket_assignments")
+}

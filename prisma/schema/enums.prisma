@@ -1,0 +1,45 @@
+// All shared enums for the project
+
+enum TicketStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  ESCALATED
+
+  @@map("ticket_status")
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+
+  @@map("priority_level")
+}
+
+enum SenderType {
+  USER
+  BOT
+  STAFF
+
+  @@map("sender_type")
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+
+  @@map("message_type")
+}
+
+enum ActorType {
+  USER
+  STAFF
+  SYSTEM
+
+  @@map("actor_type")
+}

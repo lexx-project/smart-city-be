@@ -1,0 +1,27 @@
+// External Integration: Konfigurasi koneksi ke API pihak ketiga (Pajak, PDAM, Dukcapil, dll)
+model ExternalIntegration {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agencyId       String    @map("agency_id") @db.Uuid
+  name           String    @db.VarChar                         // e.g. "API Pajak Kota"
+  serviceType    String    @map("service_type") @db.VarChar    // e.g. "PAJAK", "PDAM", "DUKCAPIL"
+  endpoint       String    @db.VarChar                         // Base URL endpoint
+  httpMethod     String    @default("POST") @map("http_method") @db.VarChar
+  authType       String    @default("API_KEY") @map("auth_type") @db.VarChar // API_KEY | BEARER | BASIC | NONE
+  credentials    Json?                                          // Encrypted credentials (API key, token, etc.)
+  requestSchema  Json?     @map("request_schema")              // Required field definitions
+  responseSchema Json?     @map("response_schema")             // How to map response to system
+  isActive       Boolean   @default(true) @map("is_active")
+  timeout        Int       @default(10000)                     // Timeout in milliseconds
+
+  createdAt      DateTime? @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  // Relations
+  agency         Agency    @relation(fields: [agencyId], references: [id])
+
+  @@index([agencyId])
+  @@index([serviceType])
+  @@index([isActive])
+  @@map("external_integrations")
+}

@@ -1,0 +1,29 @@
+model Ticket {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketNumber String        @unique @map("ticket_number") @db.VarChar
+  userId       String        @map("user_id") @db.Uuid
+  categoryId   String        @map("category_id") @db.Uuid
+  description  String?       @db.Text
+  priority     PriorityLevel @default(MEDIUM)
+  status       TicketStatus  @default(OPEN)
+  slaDeadline  DateTime?     @map("sla_deadline")
+  closedAt     DateTime?     @map("closed_at")
+
+  createdAt    DateTime?     @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
+  deletedAt    DateTime?     @map("deleted_at")
+
+  // Relations
+  user        User               @relation(fields: [userId], references: [id])
+  category    Category           @relation(fields: [categoryId], references: [id])
+  assignments TicketAssignment[]
+  logs        TicketLog[]
+  attachments TicketAttachment[]
+  escalations Escalation[]
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([slaDeadline])
+  @@map("tickets")
+}

@@ -1,0 +1,18 @@
+model SlaRule {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId            String    @map("category_id") @db.Uuid
+  maxHours              Int       @map("max_hours")
+  escalationLevel1Hours Int       @map("escalation_level_1_hours")
+  escalationLevel2Hours Int       @map("escalation_level_2_hours")
+  escalationRoleId      String    @map("escalation_role_id") @db.Uuid
+
+  createdAt             DateTime? @default(now()) @map("created_at")
+  updatedAt             DateTime? @updatedAt @map("updated_at")
+  deletedAt             DateTime? @map("deleted_at")
+
+  // Relations
+  category       Category @relation(fields: [categoryId], references: [id])
+  escalationRole Role     @relation(fields: [escalationRoleId], references: [id])
+
+  @@map("sla_rules")
+}

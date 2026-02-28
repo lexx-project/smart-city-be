@@ -1,0 +1,15 @@
+model Channel {
+  id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String    @db.VarChar
+  provider String    @db.VarChar
+  isActive Boolean   @default(true) @map("is_active")
+
+  createdAt DateTime? @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  sessions Session[]
+
+  @@map("channels")
+}

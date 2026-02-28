@@ -1,0 +1,21 @@
+model TicketLog {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketId   String    @map("ticket_id") @db.Uuid
+  actionType String    @map("action_type") @db.VarChar
+  oldValue   Json?     @map("old_value")
+  newValue   Json?     @map("new_value")
+  actorType          ActorType @map("actor_type")
+  actorId            String?   @map("actor_id") @db.Uuid
+  notificationSent   Boolean   @default(false) @map("notification_sent")
+  notificationSentAt DateTime? @map("notification_sent_at")
+
+  createdAt  DateTime? @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  // Relations
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId])
+  @@map("ticket_logs")
+}

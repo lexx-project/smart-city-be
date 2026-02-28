@@ -1,0 +1,19 @@
+model Escalation {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketId        String     @map("ticket_id") @db.Uuid
+  escalationLevel Int        @map("escalation_level")
+  escalatedTo     String     @map("escalated_to") @db.Uuid
+  escalatedAt     DateTime?  @map("escalated_at")
+  resolvedAt      DateTime?  @map("resolved_at")
+
+  createdAt       DateTime?  @default(now()) @map("created_at")
+  updatedAt       DateTime?  @updatedAt @map("updated_at")
+  deletedAt       DateTime?  @map("deleted_at")
+
+  // Relations
+  ticket          Ticket     @relation(fields: [ticketId], references: [id])
+  escalatedToUser StaffUser  @relation(fields: [escalatedTo], references: [id])
+
+  @@index([ticketId])
+  @@map("escalations")
+}

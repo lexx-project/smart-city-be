@@ -1,0 +1,23 @@
+model StaffUser {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agencyId     String    @map("agency_id") @db.Uuid
+  roleId       String    @map("role_id") @db.Uuid
+  fullName     String    @map("full_name") @db.VarChar
+  email        String    @db.VarChar
+  phone        String?   @db.VarChar
+  passwordHash String    @map("password_hash") @db.VarChar
+  isActive     Boolean   @default(true) @map("is_active")
+
+  createdAt    DateTime? @default(now()) @map("created_at")
+  updatedAt    DateTime? @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  // Relations
+  agency            Agency             @relation(fields: [agencyId], references: [id])
+  role              Role               @relation(fields: [roleId], references: [id])
+  assignedTickets   TicketAssignment[] @relation("AssignedTo")
+  assignedByTickets TicketAssignment[] @relation("AssignedBy")
+  escalations       Escalation[]
+
+  @@map("staff_users")
+}

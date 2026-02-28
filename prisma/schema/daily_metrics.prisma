@@ -1,0 +1,15 @@
+model DailyMetric {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  date              DateTime  @db.Date
+  totalMessages     Int       @map("total_messages")
+  totalTickets      Int       @map("total_tickets")
+  resolvedTickets   Int       @map("resolved_tickets")
+  avgResolutionTime Float     @map("avg_resolution_time")
+  slaComplianceRate Float     @map("sla_compliance_rate")
+
+  createdAt         DateTime? @default(now()) @map("created_at")
+  updatedAt         DateTime? @updatedAt @map("updated_at")
+
+  @@unique([date])
+  @@map("daily_metrics")
+}
